@@ -16,7 +16,7 @@ By Marek Marczykowski <marmarek@invisiblethingslab.com>
  1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/pyanaconda/display.py b/pyanaconda/display.py
-index 8379d9c90..6c1672f2d 100644
+index 880af9c..721374d 100644
 --- a/pyanaconda/display.py
 +++ b/pyanaconda/display.py
 @@ -19,6 +19,7 @@
@@ -27,14 +27,13 @@ index 8379d9c90..6c1672f2d 100644
  import os
  import subprocess
  import time
-@@ -315,17 +316,14 @@ def setup_display(anaconda, options):
-             start_x11(xtimeout)
+@@ -346,16 +347,13 @@ def setup_display(anaconda, options):
              do_startup_x11_actions()
          except TimeoutError as e:
              log.warning("X startup failed: %s", e)
 -            print("\nX did not start in the expected time, falling back to text mode. There are "
 -                  "multiple ways to avoid this issue:")
--             wrapper = textwrap.TextWrapper(initial_indent=" * ", subsequent_indent="   ",
+-            wrapper = textwrap.TextWrapper(initial_indent=" * ", subsequent_indent="   ",
 -                                           width=os.get_terminal_size().columns - 3)
 -            for line in X_TIMEOUT_ADVICE.split("\n"):
 -                print(wrapper.fill(line))
@@ -49,9 +48,9 @@ index 8379d9c90..6c1672f2d 100644
 +            input()
 +            util.ipmi_report(constants.IPMI_ABORTED)
 +            sys.exit(1)
- 
-         if not anaconda.gui_startup_failed:
-             do_extra_x11_actions(options.runres, gui_mode=anaconda.gui_mode)
+
+         except (OSError, RuntimeError) as e:
+             log.warning("X or window manager startup failed: %s", e)
 -- 
 2.25.2
 
