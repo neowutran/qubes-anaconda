@@ -15,46 +15,51 @@ By Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
  pyanaconda/payload/__init__.py | 20 +++-----------------
  1 file changed, 3 insertions(+), 17 deletions(-)
 
-diff --git a/pyanaconda/payload/__init__.py b/pyanaconda/payload/__init__.py
-index 853a50a8f..1b6cefee5 100644
---- a/pyanaconda/payload/__init__.py
-+++ b/pyanaconda/payload/__init__.py
-@@ -517,32 +517,18 @@ class Payload(metaclass=ABCMeta):
-         return False
- 
-     def recreate_initrds(self):
--        """Recreate the initrds by calling new-kernel-pkg or dracut
-+        """Recreate the initrds by calling kernel-install or dracut
- 
-         This needs to be done after all configuration files have been
-         written, since dracut depends on some of them.
- 
-         :returns: None
-         """
--        if os.path.exists(conf.target.system_root + "/usr/sbin/new-kernel-pkg"):
--            use_dracut = False
--        else:
--            log.debug("new-kernel-pkg does not exist, using dracut instead.")
--            use_dracut = True
--
-         for kernel in self.kernel_version_list:
-             log.info("recreating initrd for %s", kernel)
-             if not conf.target.is_image:
--                if use_dracut:
--                    util.execInSysroot("depmod", ["-a", kernel])
--                    util.execInSysroot("dracut",
--                                       ["-f",
--                                        "/boot/initramfs-%s.img" % kernel,
--                                        kernel])
--                else:
--                    util.execInSysroot("new-kernel-pkg",
--                                       ["--mkinitrd", "--dracut", "--depmod",
--                                        "--update", kernel])
-+                util.execInSysroot("kernel-install",
-+                                   ["add", kernel, "/boot/vmlinuz-%s" % kernel])
- 
-                 # if the installation is running in fips mode then make sure
-                 # fips is also correctly enabled in the installed system
+diff --git a/pyanaconda/modules/storage/bootloader/utils.py b/pyanaconda/modules/storage/bootloader/utils.py
+index 27fc2a0..5fcee8c 100644
+--- a/pyanaconda/modules/storage/bootloader/utils.py
++++ b/pyanaconda/modules/storage/bootloader/utils.py
+@@ -257,7 +257,7 @@ def create_bls_entries(sysroot, storage, kernel_versions):
+
+
+ def recreate_initrds(sysroot, kernel_versions):
+-    """Recreate the initrds by calling new-kernel-pkg or dracut.
++    """Recreate the initrds by calling kernel-install or dracut.
+
+     This needs to be done after all configuration files have been
+     written, since dracut depends on some of them.
+@@ -265,11 +265,6 @@ def recreate_initrds(sysroot, kernel_versions):
+     :param sysroot: a path to the root of the installed system
+     :param kernel_versions: a list of kernel versions
+     """
+-    if os.path.exists(sysroot + "/usr/sbin/new-kernel-pkg"):
+-        use_dracut = False
+-    else:
+-        log.debug("new-kernel-pkg does not exist, using dracut instead")
+-        use_dracut = True
+
+     for kernel in kernel_versions:
+         log.info("Recreating initrd for %s", kernel)
+@@ -287,18 +282,4 @@ def recreate_initrds(sysroot, kernel_versions):
+                 root=sysroot
+             )
+         else:
+-            if use_dracut:
+-                execWithRedirect(
+-                    "depmod", ["-a", kernel], root=sysroot
+-                )
+-                execWithRedirect(
+-                    "dracut",
+-                    ["-f", "/boot/initramfs-%s.img" % kernel, kernel],
+-                    root=sysroot
+-                )
+-            else:
+-                execWithRedirect(
+-                    "new-kernel-pkg",
+-                    ["--mkinitrd", "--dracut", "--depmod", "--update", kernel],
+-                    root=sysroot
+-                )
++            execWithRedirect("kernel-install",["add", kernel, "/boot/vmlinuz-%s" % kernel])
 -- 
 2.25.2
 
