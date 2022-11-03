@@ -40,7 +40,7 @@ Patch7: 0008-Check-add-user-to-wheel-and-qubes-groups.patch
 # NEOWUTRAN: TODO: Patch9: 0010-Make-sure-that-a-user-is-created-at-installation-tim.patch
 Patch10: 0011-Disable-network-by-ignoring-any-present-nic.patch
 Patch11: 0012-Remove-network-setup-from-graphical-and-text-interfa.patch
-Patch12: 0013-Drop-NTP-configuration-spoke.patch
+# NEOWUTRAN: TODO: Patch12: 0013-Drop-NTP-configuration-spoke.patch
 Patch13: 0014-Do-not-add-resume-kernel-option.patch
 # NEOWUTRAN: TODO: Patch14: 0015-Avoid-adding-duplicated-kernel-entries.patch
 # NEOWUTRAN: TODO: Patch15: 0016-Set-default-scheme-in-custom-partitioning.patch
