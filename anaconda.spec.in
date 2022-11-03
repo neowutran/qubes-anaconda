@@ -364,83 +364,81 @@ rm -f %{buildroot}/%{_libexecdir}/webui-desktop
 
 
 
- %files core -f %{name}.lang
-  %license COPYING
-  %{_unitdir}/*
-  %{_prefix}/lib/systemd/system-generators/*
-  %{_bindir}/instperf
-  %{_bindir}/anaconda-disable-nm-ibft-plugin
-  %{_bindir}/anaconda-nm-disable-autocons
-  %{_sbindir}/anaconda
-  %{_sbindir}/handle-sshpw
-  %{_datadir}/anaconda
-  %{_prefix}/libexec/anaconda
-  %exclude %{_datadir}/anaconda/gnome
-  %exclude %{_datadir}/anaconda/pixmaps
-  %exclude %{_datadir}/anaconda/ui
-  %exclude %{_datadir}/anaconda/window-manager
-  %exclude %{_datadir}/anaconda/anaconda-gtk.css
-  %dir %{_datadir}/anaconda/post-scripts
-  %exclude %{_prefix}/libexec/anaconda/dd_*
-  %{python3_sitearch}/pyanaconda
-  %exclude %{python3_sitearch}/pyanaconda/rescue.py*
-  %exclude %{python3_sitearch}/pyanaconda/__pycache__/rescue.*
-  %exclude %{python3_sitearch}/pyanaconda/ui/gui/*
-  %exclude %{python3_sitearch}/pyanaconda/ui/tui/*
-  %{_bindir}/anaconda-cleanup
-  %dir %{_sysconfdir}/%{name}
-  %config %{_sysconfdir}/%{name}/*
-  %dir %{_sysconfdir}/%{name}/conf.d
-  %config %{_sysconfdir}/%{name}/conf.d/*
-  %dir %{_sysconfdir}/%{name}/profile.d
-  %config %{_sysconfdir}/%{name}/profile.d/*
+%files core -f %{name}.lang
+%license COPYING
+%{_unitdir}/*
+%{_prefix}/lib/systemd/system-generators/*
+%{_bindir}/instperf
+%{_bindir}/anaconda-disable-nm-ibft-plugin
+%{_bindir}/anaconda-nm-disable-autocons
+%{_sbindir}/anaconda
+%{_sbindir}/handle-sshpw
+%{_datadir}/anaconda
+%{_prefix}/libexec/anaconda
+%exclude %{_datadir}/anaconda/gnome
+%exclude %{_datadir}/anaconda/pixmaps
+%exclude %{_datadir}/anaconda/ui
+%exclude %{_datadir}/anaconda/window-manager
+%exclude %{_datadir}/anaconda/anaconda-gtk.css
+%dir %{_datadir}/anaconda/post-scripts
+%exclude %{_prefix}/libexec/anaconda/dd_*
+%{python3_sitearch}/pyanaconda
+%exclude %{python3_sitearch}/pyanaconda/rescue.py*
+%exclude %{python3_sitearch}/pyanaconda/__pycache__/rescue.*
+%exclude %{python3_sitearch}/pyanaconda/ui/gui/*
+%exclude %{python3_sitearch}/pyanaconda/ui/tui/*
+%{_bindir}/anaconda-cleanup
+%dir %{_sysconfdir}/%{name}
+%config %{_sysconfdir}/%{name}/*
+%dir %{_sysconfdir}/%{name}/conf.d
+%config %{_sysconfdir}/%{name}/conf.d/*
+%dir %{_sysconfdir}/%{name}/profile.d
+%config %{_sysconfdir}/%{name}/profile.d/*
 
 %files live
-  %{_bindir}/liveinst
-  %{_sbindir}/liveinst
-  %config(noreplace) %{_sysconfdir}/pam.d/*
-  %config(noreplace) %{_sysconfdir}/security/console.apps/*
-  %{_libexecdir}/liveinst-setup.sh
-  %{_datadir}/applications/*.desktop
-  %{_datadir}/anaconda/gnome
-  %{_sysconfdir}/xdg/autostart/*.desktop
+%{_bindir}/liveinst
+%{_sbindir}/liveinst
+%config(noreplace) %{_sysconfdir}/pam.d/*
+%config(noreplace) %{_sysconfdir}/security/console.apps/*
+%{_libexecdir}/liveinst-setup.sh
+%{_datadir}/applications/*.desktop
+%{_datadir}/anaconda/gnome
+%{_sysconfdir}/xdg/autostart/*.desktop
 
 
-  %files gui
-  %{python3_sitearch}/pyanaconda/ui/gui/*
-  %{_datadir}/anaconda/pixmaps
-  %{_datadir}/anaconda/ui
-  %if 0%{?rhel}
-  # Remove blivet-gui
-  %exclude %{_datadir}/anaconda/ui/spokes/blivet_gui.*
-  %exclude %{python3_sitearch}/pyanaconda/ui/gui/spokes/blivet_gui.*
-  %endif
-  %{_datadir}/anaconda/window-manager
-  %{_datadir}/anaconda/anaconda-gtk.css
+%files gui
+%{python3_sitearch}/pyanaconda/ui/gui/*
+%{_datadir}/anaconda/pixmaps
+%{_datadir}/anaconda/ui
+%if 0%{?rhel}
+# Remove blivet-gui
+%exclude %{_datadir}/anaconda/ui/spokes/blivet_gui.*
+%exclude %{python3_sitearch}/pyanaconda/ui/gui/spokes/blivet_gui.*
+%endif
+%{_datadir}/anaconda/window-manager
+%{_datadir}/anaconda/anaconda-gtk.css
 
-  %files tui
-  %{python3_sitearch}/pyanaconda/rescue.py
-  %{python3_sitearch}/pyanaconda/__pycache__/rescue.*
-  %{python3_sitearch}/pyanaconda/ui/tui/*
+%files tui
+%{python3_sitearch}/pyanaconda/rescue.py
+%{python3_sitearch}/pyanaconda/__pycache__/rescue.*
+%{python3_sitearch}/pyanaconda/ui/tui/*
 
-  %files widgets
-  %{_libdir}/libAnacondaWidgets.so.*
-  %{_libdir}/girepository*/AnacondaWidgets*typelib
-  %{python3_sitearch}/gi/overrides/*
+%files widgets
+%{_libdir}/libAnacondaWidgets.so.*
+%{_libdir}/girepository*/AnacondaWidgets*typelib
+%{python3_sitearch}/gi/overrides/*
 
-  %files widgets-devel
-  %{_libdir}/libAnacondaWidgets.so
-  %{_libdir}/glade/modules/libAnacondaWidgets.so
-  %{_includedir}/*
-  %{_datadir}/glade/catalogs/AnacondaWidgets.xml
-  %{_datadir}/gtk-doc
+%files widgets-devel
+%{_libdir}/libAnacondaWidgets.so
+%{_libdir}/glade/modules/libAnacondaWidgets.so
+%{_includedir}/*
+%{_datadir}/glade/catalogs/AnacondaWidgets.xml
+%{_datadir}/gtk-doc
 
-  %files dracut
-  %dir %{_prefix}/lib/dracut/modules.d/80%{name}
-  %{_prefix}/lib/dracut/modules.d/80%{name}/*
-  %{_prefix}/libexec/anaconda/dd_*
-
-
+%files dracut
+%dir %{_prefix}/lib/dracut/modules.d/80%{name}
+%{_prefix}/lib/dracut/modules.d/80%{name}/*
+%{_prefix}/libexec/anaconda/dd_*
 
 %changelog
 @CHANGELOG@
