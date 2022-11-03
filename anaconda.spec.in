@@ -314,17 +314,6 @@ runtime on NFS/HTTP/FTP servers or local disks.
 %prep
 %autosetup -p1
 
-# Copy QubesOS post-install scripts
-#cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} data/post-scripts/
-#sed -i 's|dist_postscripts_DATA = \(.*\)|dist_postscripts_DATA = %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} \1|' data/post-scripts/Makefile.am
-
-# Copy QubesOS product file
-#cp %{SOURCE1} data/product.d/
-
-# Inject QubesOS documentation directly
-#mkdir -p %{buildroot}%{_datadir}/anaconda/help
-#cp -r %{SOURCE2} %{SOURCE3} %{SOURCE4} data/product.d/
-
 %build
 # use actual build-time release number, not tarball creation time release number
 %configure ANACONDA_RELEASE=%{release}
@@ -337,12 +326,33 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 # Create an empty directory for addons
 mkdir %{buildroot}%{_datadir}/anaconda/addons
 
+# Create an empty directory for post-scripts
+mkdir %{buildroot}%{_datadir}/anaconda/post-scripts
+
+
+
+##### QUBES BEGIN ###
+# Copy QubesOS post-install scripts
+cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{buildroot}%{_datadir}/anaconda/post-scripts/
+#sed -i 's|dist_postscripts_DATA = \(.*\)|dist_postscripts_DATA = %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} \1|' data/post-scripts/Makefile.am
+
+# Copy QubesOS product file
+#cp %{SOURCE1} data/product.d/
+
+# Inject QubesOS documentation directly
+#mkdir -p %{buildroot}%{_datadir}/anaconda/help
+#cp -r %{SOURCE2} %{SOURCE3} %{SOURCE4} data/product.d/
+########### Qubes end ####
+
+
 # required for live installations
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/liveinst.desktop
 
-# If no langs found, keep going
-%find_lang %{name} || :
+%find_lang %{name}
 
+rm -rf %{buildroot}/%{_datadir}/cockpit/anaconda-webui
+rm -f %{buildroot}/%{_datadir}/metainfo/org.cockpit-project.anaconda-webui.metainfo.xml
+rm -f %{buildroot}/%{_libexecdir}/webui-desktop
 
 # main package and install-env-deps are metapackages
 %files
@@ -352,74 +362,85 @@ desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{buildroot}%{_d
 # Allow the lang file to be empty
 %define _empty_manifest_terminate_build 0
 
-%files core -f %{name}.lang
-%license COPYING
-%{_unitdir}/*
-%{_prefix}/lib/systemd/system-generators/*
-%{_bindir}/instperf
-%{_bindir}/anaconda-disable-nm-ibft-plugin
-%{_sbindir}/anaconda
-%{_sbindir}/handle-sshpw
-%{_datadir}/anaconda
-%{_prefix}/libexec/anaconda
-%exclude %{_datadir}/anaconda/gnome
-%exclude %{_datadir}/anaconda/pixmaps
-%exclude %{_datadir}/anaconda/ui
-%exclude %{_datadir}/anaconda/window-manager
-%exclude %{_datadir}/anaconda/anaconda-gtk.css
-%exclude %{_prefix}/libexec/anaconda/dd_*
-%{python3_sitearch}/pyanaconda
-%exclude %{python3_sitearch}/pyanaconda/rescue.py*
-%exclude %{python3_sitearch}/pyanaconda/__pycache__/rescue.*
-%exclude %{python3_sitearch}/pyanaconda/ui/gui/*
-%exclude %{python3_sitearch}/pyanaconda/ui/tui/*
-%{_bindir}/analog
-%{_bindir}/anaconda-cleanup
-%dir %{_sysconfdir}/%{name}
-%config %{_sysconfdir}/%{name}/*
-%dir %{_sysconfdir}/%{name}/conf.d
-%config %{_sysconfdir}/%{name}/conf.d/*
-%dir %{_sysconfdir}/%{name}/product.d
-%config %{_sysconfdir}/%{name}/product.d/*
+
+
+ %files core -f %{name}.lang
+  %license COPYING
+  %{_unitdir}/*
+  %{_prefix}/lib/systemd/system-generators/*
+  %{_bindir}/instperf
+  %{_bindir}/anaconda-disable-nm-ibft-plugin
+  %{_bindir}/anaconda-nm-disable-autocons
+  %{_sbindir}/anaconda
+  %{_sbindir}/handle-sshpw
+  %{_datadir}/anaconda
+  %{_prefix}/libexec/anaconda
+  %exclude %{_datadir}/anaconda/gnome
+  %exclude %{_datadir}/anaconda/pixmaps
+  %exclude %{_datadir}/anaconda/ui
+  %exclude %{_datadir}/anaconda/window-manager
+  %exclude %{_datadir}/anaconda/anaconda-gtk.css
+  %dir %{_datadir}/anaconda/post-scripts
+  %exclude %{_prefix}/libexec/anaconda/dd_*
+  %{python3_sitearch}/pyanaconda
+  %exclude %{python3_sitearch}/pyanaconda/rescue.py*
+  %exclude %{python3_sitearch}/pyanaconda/__pycache__/rescue.*
+  %exclude %{python3_sitearch}/pyanaconda/ui/gui/*
+  %exclude %{python3_sitearch}/pyanaconda/ui/tui/*
+  %{_bindir}/anaconda-cleanup
+  %dir %{_sysconfdir}/%{name}
+  %config %{_sysconfdir}/%{name}/*
+  %dir %{_sysconfdir}/%{name}/conf.d
+  %config %{_sysconfdir}/%{name}/conf.d/*
+  %dir %{_sysconfdir}/%{name}/profile.d
+  %config %{_sysconfdir}/%{name}/profile.d/*
 
 %files live
-%{_bindir}/liveinst
-%{_sbindir}/liveinst
-%config(noreplace) %{_sysconfdir}/pam.d/*
-%config(noreplace) %{_sysconfdir}/security/console.apps/*
-%{_libexecdir}/liveinst-setup.sh
-%{_datadir}/applications/*.desktop
-%{_datadir}/anaconda/gnome
-%{_sysconfdir}/xdg/autostart/*.desktop
+  %{_bindir}/liveinst
+  %{_sbindir}/liveinst
+  %config(noreplace) %{_sysconfdir}/pam.d/*
+  %config(noreplace) %{_sysconfdir}/security/console.apps/*
+  %{_libexecdir}/liveinst-setup.sh
+  %{_datadir}/applications/*.desktop
+  %{_datadir}/anaconda/gnome
+  %{_sysconfdir}/xdg/autostart/*.desktop
 
-%files gui
-%{python3_sitearch}/pyanaconda/ui/gui/*
-%{_datadir}/anaconda/pixmaps
-%{_datadir}/anaconda/ui
-%{_datadir}/anaconda/window-manager
-%{_datadir}/anaconda/anaconda-gtk.css
 
-%files tui
-%{python3_sitearch}/pyanaconda/rescue.py
-%{python3_sitearch}/pyanaconda/__pycache__/rescue.*
-%{python3_sitearch}/pyanaconda/ui/tui/*
+  %files gui
+  %{python3_sitearch}/pyanaconda/ui/gui/*
+  %{_datadir}/anaconda/pixmaps
+  %{_datadir}/anaconda/ui
+  %if 0%{?rhel}
+  # Remove blivet-gui
+  %exclude %{_datadir}/anaconda/ui/spokes/blivet_gui.*
+  %exclude %{python3_sitearch}/pyanaconda/ui/gui/spokes/blivet_gui.*
+  %endif
+  %{_datadir}/anaconda/window-manager
+  %{_datadir}/anaconda/anaconda-gtk.css
 
-%files widgets
-%{_libdir}/libAnacondaWidgets.so.*
-%{_libdir}/girepository*/AnacondaWidgets*typelib
-%{python3_sitearch}/gi/overrides/*
+  %files tui
+  %{python3_sitearch}/pyanaconda/rescue.py
+  %{python3_sitearch}/pyanaconda/__pycache__/rescue.*
+  %{python3_sitearch}/pyanaconda/ui/tui/*
 
-%files widgets-devel
-%{_libdir}/libAnacondaWidgets.so
-%{_libdir}/glade/modules/libAnacondaWidgets.so
-%{_includedir}/*
-%{_datadir}/glade/catalogs/AnacondaWidgets.xml
-%{_datadir}/gtk-doc
+  %files widgets
+  %{_libdir}/libAnacondaWidgets.so.*
+  %{_libdir}/girepository*/AnacondaWidgets*typelib
+  %{python3_sitearch}/gi/overrides/*
 
-%files dracut
-%dir %{_prefix}/lib/dracut/modules.d/80%{name}
-%{_prefix}/lib/dracut/modules.d/80%{name}/*
-%{_prefix}/libexec/anaconda/dd_*
+  %files widgets-devel
+  %{_libdir}/libAnacondaWidgets.so
+  %{_libdir}/glade/modules/libAnacondaWidgets.so
+  %{_includedir}/*
+  %{_datadir}/glade/catalogs/AnacondaWidgets.xml
+  %{_datadir}/gtk-doc
+
+  %files dracut
+  %dir %{_prefix}/lib/dracut/modules.d/80%{name}
+  %{_prefix}/lib/dracut/modules.d/80%{name}/*
+  %{_prefix}/libexec/anaconda/dd_*
+
+
 
 %changelog
 @CHANGELOG@
