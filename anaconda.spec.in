@@ -1,4 +1,7 @@
-# Avoid anaconda-core requiring gjs-console due to the GNOME welcome
+# NEOWUTRAN: Allow fuzz patching
+%global _default_patch_fuzz 2
+
+#Avoid anaconda-core requiring gjs-console due to the GNOME welcome
 # screen that's shipped in it
 %global __requires_exclude_from ^%{_datadir}/anaconda/gnome/fedora-welcome.*$
 
