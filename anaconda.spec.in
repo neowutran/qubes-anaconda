@@ -315,15 +315,15 @@ runtime on NFS/HTTP/FTP servers or local disks.
 %autosetup -p1
 
 # Copy QubesOS post-install scripts
-cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} data/post-scripts/
-sed -i 's|dist_postscripts_DATA = \(.*\)|dist_postscripts_DATA = %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} \1|' data/post-scripts/Makefile.am
+#cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} data/post-scripts/
+#sed -i 's|dist_postscripts_DATA = \(.*\)|dist_postscripts_DATA = %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} \1|' data/post-scripts/Makefile.am
 
 # Copy QubesOS product file
-cp %{SOURCE1} data/product.d/
+#cp %{SOURCE1} data/product.d/
 
 # Inject QubesOS documentation directly
-mkdir -p %{buildroot}%{_datadir}/anaconda/help
-cp -r %{SOURCE2} %{SOURCE3} %{SOURCE4} data/product.d/
+#mkdir -p %{buildroot}%{_datadir}/anaconda/help
+#cp -r %{SOURCE2} %{SOURCE3} %{SOURCE4} data/product.d/
 
 %build
 # use actual build-time release number, not tarball creation time release number
