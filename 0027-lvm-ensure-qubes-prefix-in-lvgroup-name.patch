@@ -5,13 +5,13 @@ Date: Tue, 7 Jan 2020 19:20:22 +0100
 Subject: [PATCH] lvm: ensure 'qubes' prefix in lvgroup name
 
 ---
- pyanaconda/storage/osinstall.py | 4 +++-
+ pyanaconda/storage/model.py | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/pyanaconda/storage/osinstall.py b/pyanaconda/storage/osinstall.py
+diff --git a/pyanaconda/modules/storage/devicetree/model.py b/pyanaconda/modules/storage/devicetree/model.py
 index f9aa02db9..642f1ace4 100644
---- a/pyanaconda/storage/osinstall.py
-+++ b/pyanaconda/storage/osinstall.py
+--- a/pyanaconda/modules/storage/devicetree/model.py
++++ b/pyanaconda/modules/storage/devicetree/model.py
 @@ -406,7 +406,9 @@ class InstallerStorage(Blivet):
  
      def _get_container_name_template(self, prefix=None):

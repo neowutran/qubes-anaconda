@@ -26,14 +26,14 @@ By Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
  pyanaconda/storage/root.py | 12 ++++++++++--
  1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/pyanaconda/storage/root.py b/pyanaconda/storage/root.py
+diff --git a/pyanaconda/modules/storage/devicetree/root.py b/pyanaconda/modules/storage/devicetree/root.py
 index cdf4d5019..0a8d6e3fc 100644
---- a/pyanaconda/storage/root.py
-+++ b/pyanaconda/storage/root.py
+--- a/pyanaconda/modules/storage/devicetree/root.py
++++ b/pyanaconda/modules/storage/devicetree/root.py
 @@ -26,6 +26,7 @@ from pyanaconda.core import util
- from pyanaconda.core.configuration.anaconda import conf
  from pyanaconda.core.i18n import _
- from pyanaconda.storage.fsset import BlkidTab, CryptTab
+ from pyanaconda.core.path import set_system_root
+ from pyanaconda.modules.storage.devicetree.fsset import BlkidTab, CryptTab
 +from pyanaconda.flags import flags
  
  from pyanaconda.anaconda_loggers import get_module_logger

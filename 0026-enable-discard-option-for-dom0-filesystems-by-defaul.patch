@@ -15,10 +15,10 @@ Fixes QubesOS/qubes-issues#3226
  pyanaconda/storage/fsset.py | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/pyanaconda/storage/fsset.py b/pyanaconda/storage/fsset.py
+diff --git a/pyanaconda/modules/storage/devicetree/fsset.py b/pyanaconda/modules/storage/devicetree/fsset.py
 index ad0dc540e..4ee391440 100644
---- a/pyanaconda/storage/fsset.py
-+++ b/pyanaconda/storage/fsset.py
+--- a/pyanaconda/modules/storage/devicetree/fsset.py
++++ b/pyanaconda/modules/storage/devicetree/fsset.py
 @@ -764,6 +764,8 @@ class FSSet(object):
                      break
              if device.encrypted:

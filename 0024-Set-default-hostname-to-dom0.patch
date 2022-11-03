@@ -17,24 +17,11 @@ index ee8a235c9..f02e31bc0 100644
          self._firewall_module = FirewallModule()
  
          self.hostname_changed = Signal()
--        self._hostname = "localhost.localdomain"
+-        self._hostname = ""
 +        self._hostname = "dom0"
  
          self.current_hostname_changed = Signal()
-         self._hostname_service_proxy = None
-diff --git a/pyanaconda/network.py b/pyanaconda/network.py
-index f8e9b19a1..8ddb17650 100644
---- a/pyanaconda/network.py
-+++ b/pyanaconda/network.py
-@@ -47,7 +47,7 @@ from pyanaconda.modules.common.structures.network import NetworkDeviceInfo
- from pyanaconda.anaconda_loggers import get_module_logger
- log = get_module_logger(__name__)
- 
--DEFAULT_HOSTNAME = "localhost.localdomain"
-+DEFAULT_HOSTNAME = "dom0"
- 
- network_connected = None
- network_connected_condition = threading.Condition()
+         self._hostname_service_proxy = self._get_hostname_proxy()
 -- 
 2.25.2
 
