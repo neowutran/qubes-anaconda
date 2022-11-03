@@ -1,4 +1,4 @@
-DIST ?= fc33
+DIST ?= fc37
 VERSION := $(file <version)
 REL := $(file <rel)
 

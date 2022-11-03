@@ -12,8 +12,8 @@ By Marek Marczykowski <marmarek@invisiblethingslab.com>
 
 diff --git a/pyanaconda/bootloader/grub2.py b/pyanaconda/bootloader/grub2.py
 index 4695c1cd4..ab17af31d 100644
---- a/pyanaconda/bootloader/grub2.py
-+++ b/pyanaconda/bootloader/grub2.py
+--- a/pyanaconda/modules/storage/bootloader/grub2.py
++++ b/pyanaconda/modules/storage/bootloader/grub2.py
 @@ -333,6 +333,9 @@ class GRUB2(BootLoader):
          except (BootLoaderError, OSError, RuntimeError) as e:
              log.error("boot loader password setup failed: %s", e)
