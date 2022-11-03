@@ -15,10 +15,10 @@ By Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
  pyanaconda/bootloader/extlinux.py | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/pyanaconda/bootloader/extlinux.py b/pyanaconda/bootloader/extlinux.py
+diff --git a/pyanaconda/modules/storage/bootloader/extlinux.py b/pyanaconda/modules/storage/bootloader/extlinux.py
 index e3e0b4d7b..3b40f35ac 100644
---- a/pyanaconda/bootloader/extlinux.py
-+++ b/pyanaconda/bootloader/extlinux.py
+--- a/pyanaconda/modules/storage/bootloader/extlinux.py
++++ b/pyanaconda/modules/storage/bootloader/extlinux.py
 @@ -65,6 +65,8 @@ class EXTLINUX(BootLoader):
  
      def write_config_images(self, config):
