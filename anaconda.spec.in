@@ -175,7 +175,7 @@ Requires: crypto-policies
 Requires: /usr/bin/update-crypto-policies
 
 # required because of the rescue mode and VNC question
-Requires: anaconda-tui = %{version}-%{release}
+Requires: anaconda-tui = %{epoch}:%{version}-%{release}
 
 # Make sure we get the en locale one way or another
 Requires: (glibc-langpack-en or glibc-all-langpacks)
@@ -192,9 +192,9 @@ Conflicts: grubby < 8.40-10
 Requires: xen-runtime
 
 Obsoletes: anaconda-images <= 10
-Provides: anaconda-images = %{version}-%{release}
-Obsoletes: anaconda-runtime < %{version}-%{release}
-Provides: anaconda-runtime = %{version}-%{release}
+Provides: anaconda-images = %{epoch}:%{version}-%{release}
+Obsoletes: anaconda-runtime < %{epoch}:%{version}-%{release}
+Provides: anaconda-runtime = %{epoch}:%{version}-%{release}
 Obsoletes: booty <= 0.107-1
 
 %description core
