@@ -12,18 +12,18 @@ Based on commits bf803e7 and 62cb1ca
  pyanaconda/bootloader/grub2.py | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/pyanaconda/bootloader/grub2.py b/pyanaconda/bootloader/grub2.py
+diff --git a/pyanaconda/modules/storage/bootloader/grub2.py b/pyanaconda/modules/storage/bootloader/grub2.py
 index daf9fc53e..be332f215 100644
---- a/pyanaconda/bootloader/grub2.py
-+++ b/pyanaconda/bootloader/grub2.py
-@@ -25,6 +25,7 @@ from pyanaconda.bootloader.base import BootLoader, BootLoaderError
+--- a/pyanaconda/modules/storage/bootloader/grub2.py
++++ b/pyanaconda/modules/storage/bootloader/grub2.py
+@@ -25,6 +25,7 @@ from pyanaconda.modules.storage.bootloader.base import BootLoader, BootLoaderError
  from pyanaconda.core import util
  from pyanaconda.core.configuration.anaconda import conf
  from pyanaconda.core.i18n import _
 +from pyanaconda.core.kernel import kernel_arguments
+ from pyanaconda.core.path import open_with_perm
  from pyanaconda.product import productName
  
- from pyanaconda.anaconda_loggers import get_module_logger
 @@ -130,6 +131,8 @@ class GRUB2(BootLoader):
      def __init__(self):
          super().__init__()

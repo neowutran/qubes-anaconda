@@ -50,10 +50,10 @@ Based on :
  pyanaconda/bootloader/grub2.py | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/pyanaconda/bootloader/grub2.py b/pyanaconda/bootloader/grub2.py
+diff --git a/pyanaconda/modules/storage/bootloader/grub2.py b/pyanaconda/modules/storage/bootloader/grub2.py
 index be332f215..155e1ab53 100644
---- a/pyanaconda/bootloader/grub2.py
-+++ b/pyanaconda/bootloader/grub2.py
+--- a/pyanaconda/modules/storage/bootloader/grub2.py
++++ b/pyanaconda/modules/storage/bootloader/grub2.py
 @@ -273,6 +273,8 @@ class GRUB2(BootLoader):
          defaults.write("GRUB_CMDLINE_LINUX=\"%s\"\n" % self.boot_args)
          defaults.write("GRUB_DISABLE_RECOVERY=\"true\"\n")
