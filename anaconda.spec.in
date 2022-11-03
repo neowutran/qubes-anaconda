@@ -53,39 +53,42 @@ Patch24: 0025-Setup-grubx64.efi-directly-as-a-bootloader.patch
 Patch25: 0026-enable-discard-option-for-dom0-filesystems-by-defaul.patch
 Patch26: 0027-lvm-ensure-qubes-prefix-in-lvgroup-name.patch
 Patch27: 0028-automatic_partitioning-rename-thin-to-thin_volume-sa.patch
-Patch28: 0029-Handle-thin-logical-pool-request-in-automatic-partio.patch
-Patch29: 0030-Add-specific-BTRFS-automatic-partitioning-scheme.patch
-Patch30: 0031-Compute-template-RPMs-needed-spaces.patch
-Patch31: 0032-dnfpayload-make-available-repos-for-post-scripts.patch
-Patch32: 0033-Set-human-names-for-Qubes-thin-pools.patch
-Patch33: 0034-Fix-standard-partitioning-set-xfs-as-default-fs-ther.patch
-Patch34: 0035-Resolve-filename-into-associated-loop-device.patch
+# Neowutran: TODO: Patch28: 0029-Handle-thin-logical-pool-request-in-automatic-partio.patch
+# Neowutran: TODO: Patch29: 0030-Add-specific-BTRFS-automatic-partitioning-scheme.patch
+# Neowutran: Patch30: 0031-Compute-template-RPMs-needed-spaces.patch
+# Neowutran: Patch31: 0032-dnfpayload-make-available-repos-for-post-scripts.patch
+#Neowutran : Patch32: 0033-Set-human-names-for-Qubes-thin-pools.patch
+# Neowutran: Patch33: 0034-Fix-standard-partitioning-set-xfs-as-default-fs-ther.patch
+# Neowutran: Patch34: 0035-Resolve-filename-into-associated-loop-device.patch
 
 # Versions of required components (done so we make sure the buildrequires
 # match the requires versions of things).
 
 %define blivetguiver 2.1.12-1
+%define dasbusver 1.3
 %define dbusver 1.2.3
 %define dnfver 3.6.0
 %define dracutver 034-7
 %define fcoeutilsver 1.0.12-3.20100323git
 %define gettextver 0.19.8
 %define gtk3ver 3.22.17
-%define helpver 22.1-1
-%define isomd5sum 1.0.10
-%define langtablever 0.0.49
+%define helpver 26.2-1
+%define isomd5sumver 1.0.10
+%define langtablever 0.0.54
 %define libarchivever 3.0.4
 %define libblockdevver 2.1
+%define libreportanacondaver 2.0.21-1
 %define libtimezonemapver 0.4.1-2
 %define libxklavierver 5.4
 %define mehver 0.23-1
 %define nmver 1.0
-%define pykickstartver 3.23-1
+%define pykickstartver 3.41-1
 %define pypartedver 2.5-2
-%define rpmver 4.10.0
-%define simplelinever 1.1-1
+%define pythonblivetver 1:3.4.4-3
+%define rpmver 4.15.0
+%define simplelinever 1.9.0-1
+%define subscriptionmanagerver 1.26
 %define utillinuxver 2.15.1
-%define dasbusver 0.2
 
 BuildRequires: audit-libs-devel
 BuildRequires: libtool
@@ -98,10 +101,9 @@ BuildRequires: gobject-introspection-devel
 BuildRequires: glade-devel
 BuildRequires: libgnomekbd-devel
 BuildRequires: libxklavier-devel >= %{libxklavierver}
+BuildRequires: make
 BuildRequires: pango-devel
-BuildRequires: python3-kickstart >= %{pykickstartver}
 BuildRequires: python3-devel
-BuildRequires: python3-nose
 BuildRequires: systemd
 # rpm and libarchive are needed for driver disk handling
 BuildRequires: rpm-devel >= %{rpmver}
@@ -115,10 +117,8 @@ BuildRequires: libtimezonemap-devel >= %{libtimezonemapver}
 BuildRequires: gdk-pixbuf2-devel
 BuildRequires: libxml2
 
-Requires: anaconda-core = %{epoch}:%{version}-%{release}
 Requires: anaconda-gui = %{epoch}:%{version}-%{release}
 Requires: anaconda-tui = %{epoch}:%{version}-%{release}
-Requires: anaconda-install-env-deps = %{epoch}:%{version}-%{release}
 
 %description
 The anaconda package is a metapackage for the Anaconda installer.
@@ -127,12 +127,12 @@ The anaconda package is a metapackage for the Anaconda installer.
 Summary: Core of the Anaconda installer
 Requires: python3-libs
 Requires: python3-dnf >= %{dnfver}
-Requires: python3-blivet >= 1:3.2.0-1
+Requires: python3-blivet >= %{pythonblivetver}
 Requires: python3-blockdev >= %{libblockdevver}
 Requires: python3-meh >= %{mehver}
-Requires: libreport-anaconda >= 2.0.21-1
+Requires: libreport-anaconda >= %{libreportanacondaver}
 Requires: libselinux-python3
-Requires: rpm-python3 >= %{rpmver}
+Requires: python3-rpm >= %{rpmver}
 Requires: python3-pyparted >= %{pypartedver}
 Requires: python3-requests
 Requires: python3-requests-file
@@ -146,32 +146,44 @@ Requires: python3-pwquality
 Requires: python3-systemd
 Requires: python3-productmd
 Requires: python3-dasbus >= %{dasbusver}
+Requires: python3-packaging
 Requires: flatpak-libs
+
 
 # pwquality only "recommends" the dictionaries it needs to do anything useful,
 # which is apparently great for containers but unhelpful for the rest of us
 Requires: cracklib-dicts
 
-Requires: python3-pytz
+Requires: teamd
 %ifarch s390 s390x
 Requires: openssh
 %endif
+Requires: NetworkManager >= %{nmver}
 Requires: NetworkManager-libnm >= %{nmver}
+Requires: NetworkManager-team
 Requires: kbd
-Requires: python3-ntplib
+Requires: chrony
 Requires: systemd
+Requires: systemd-resolved
 Requires: python3-pid
-Requires: python3-ordered-set >= 2.0.0
+
+# Required by the systemd service anaconda-fips.
+Requires: crypto-policies
+Requires: /usr/bin/update-crypto-policies
 
 # required because of the rescue mode and VNC question
-Requires: anaconda-tui = %{epoch}:%{version}-%{release}
+Requires: anaconda-tui = %{version}-%{release}
 
 # Make sure we get the en locale one way or another
-Requires: glibc-langpack-en
+Requires: (glibc-langpack-en or glibc-all-langpacks)
 
 # anaconda literally runs its own dbus-daemon, so it needs this,
 # even though the distro default is dbus-broker in F30+
 Requires: dbus-daemon
+
+# Ensure it's not possible for a version of grubby to be installed
+# that doesn't work with btrfs subvolumes correctly...
+Conflicts: grubby < 8.40-10
 
 # check for supported hardware on Qubes OS require xl binary
 Requires: xen-runtime
@@ -193,6 +205,8 @@ BuildRequires: desktop-file-utils
 Requires: anaconda-gui = %{epoch}:%{version}-%{release}
 Requires: usermode
 Requires: zenity
+Requires: xisxwayland
+Recommends: xhost
 
 %description live
 The anaconda-live package contains scripts, data and dependencies required
@@ -203,6 +217,7 @@ Summary: Installation environment specific dependencies
 Requires: udisks2-iscsi
 Requires: libblockdev-plugins-all >= %{libblockdevver}
 # active directory/freeipa join support
+Requires: libblockdev-lvm-dbus
 Requires: realmd
 Requires: isomd5sum >= %{isomd5sum}
 %ifarch %{ix86} x86_64
@@ -234,10 +249,15 @@ Requires: anaconda-core = %{epoch}:%{version}-%{release}
 Requires: anaconda-widgets = %{epoch}:%{version}-%{release}
 Requires: python3-meh-gui >= %{mehver}
 Requires: adwaita-icon-theme
+Requires: tigervnc-server-minimal
 Requires: libxklavier >= %{libxklavierver}
 Requires: libgnomekbd
 Requires: libtimezonemap >= %{libtimezonemapver}
+Requires: nm-connection-editor
 Requires: keybinder3
+%ifnarch s390 s390x
+Requires: NetworkManager-wifi
+%endif
 Requires: anaconda-user-help >= %{helpver}
 Requires: yelp
 Requires: blivet-gui-runtime >= %{blivetguiver}
@@ -245,7 +265,7 @@ Requires: system-logos
 
 # Needed to compile the gsettings files
 BuildRequires: gsettings-desktop-schemas
-BuildRequires: metacity
+
 
 %description gui
 This package contains graphical user interface for the Anaconda installer.
