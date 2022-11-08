@@ -27,7 +27,6 @@ Source5: 30-qubes-templates.ks
 Source6: 40-qubes-alt-kernels.ks
 Source7: 50-qubes.ks
 Source8: 60-systemd-preset.ks
-Source9: os-release
 
 # NEOWUTRAN: TODO: Patch0: 0001-check-for-Qubes-OS-hardware-required-features.patch
 Patch1: 0002-Fix-grub-config-setup-by-removing-non-xen-options.patch
@@ -343,7 +342,6 @@ cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{buildroot}%{_datadir}/anacon
 
 # Copy QubesOS product file
 cp %{SOURCE1} data/profile.d/
-cp %{SOURCE9} %{buildroot}%{_sysconfdir}/
 
 # Inject QubesOS documentation directly
 mkdir -p %{buildroot}%{_datadir}/anaconda/help
@@ -362,7 +360,6 @@ rm -f %{buildroot}/%{_libexecdir}/webui-desktop
 
 # main package and install-env-deps are metapackages
 %files
-%{_sysconfdir}/os-release
 
 %files install-env-deps
 
