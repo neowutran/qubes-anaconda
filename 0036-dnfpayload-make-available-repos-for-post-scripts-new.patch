@@ -7,7 +7,7 @@ index 5312825..db48437 100644
      def _set_additional_repos_from_opts(self, opts):
          """Set additional repositories based on the Anaconda options."""
 +           
-+        repo = RepoConfigurationDataConf()
++        repo = RepoConfigurationData()
 +        repo.name = "installer.repo"
 +        repo.enabled = True 
 +        repo.type = URL_TYPE_BASEURL
