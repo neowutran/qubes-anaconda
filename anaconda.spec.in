@@ -341,7 +341,7 @@ mkdir %{buildroot}%{_datadir}/anaconda/post-scripts
 cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{buildroot}%{_datadir}/anaconda/post-scripts/
 
 # Copy QubesOS product file
-cp %{SOURCE1} %{buildroot}%{_sysconfdir}anaconda/profile.d/
+cp %{SOURCE1} %{buildroot}%{_sysconfdir}anaconda/profile.d/qubes.conf
 
 # Inject QubesOS documentation directly
 #mkdir -p %{buildroot}%{_datadir}/anaconda/help
@@ -360,7 +360,7 @@ rm -f %{buildroot}/%{_libexecdir}/webui-desktop
 
 # main package and install-env-deps are metapackages
 %files
-%{_sysconfdir}/anaconda/profile.d/qubesos.conf
+%{_sysconfdir}/anaconda/profile.d/qubes.conf
 
 %files install-env-deps
 
