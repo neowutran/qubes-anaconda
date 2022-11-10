@@ -8,21 +8,19 @@ Subject: [PATCH] dnfpayload: make available repos for post-scripts
  pyanaconda/payload/dnfpayload.py | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/pyanaconda/payload/dnfpayload.py b/pyanaconda/payload/dnfpayload.py
-index 51cae424e..b1bbb2486 100644
---- a/pyanaconda/payload/dnfpayload.py
-+++ b/pyanaconda/payload/dnfpayload.py
-@@ -409,6 +409,10 @@ class DNFPayload(payload.PackagePayload):
-         if not ksrepo.enabled:
-             self.disable_repo(repo.id)
+diff --git a/pyanaconda/modules/payloads/kickstart.py b/pyanaconda/modules/payloads/kickstart.py
+index 22edeb5..ea74658 100644
+--- a/pyanaconda/modules/payloads/kickstart.py
++++ b/pyanaconda/modules/payloads/kickstart.py
+@@ -112,6 +112,10 @@ def convert_repo_data_to_ks_repo(repo_data):
+     ks_data.excludepkgs = repo_data.excluded_packages
+     ks_data.install = repo_data.installation_enabled
  
-+        repo_file = '/tmp/installer.repo'
-+        with open(repo_file, 'a') as repo_fd:
-+            repo_fd.write(repo.dump())
++    repo_file = '/tmp/installer.repo'
++    with open(repo_file, 'a') as repo_fd:
++        repo_fd.write(repo_data.dump())
 +
-         log.info("added repo: '%s' - %s", ksrepo.name, url or mirrorlist or metalink)
+     return ks_data
  
-     def _fetch_md(self, repo_name):
 -- 
 2.25.4
-
