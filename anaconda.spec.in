@@ -36,13 +36,13 @@ Patch4: 0005-Add-Qubes-grub2-default-parameters.patch
 Patch5: 0006-Abort-installation-on-X-startup-fail.patch
 Patch6: 0007-Mark-qubes-user-name-as-reserved.patch
 Patch7: 0008-Check-add-user-to-wheel-and-qubes-groups.patch
-# NEOWUTRAN: TODO: Patch8: 0009-Simplify-USER-configuration-spoke.patch
-# NEOWUTRAN: TODO: Patch9: 0010-Make-sure-that-a-user-is-created-at-installation-tim.patch
+Patch8: 0009-Simplify-USER-configuration-spoke.patch
+Patch9: 0010-Make-sure-that-a-user-is-created-at-installation-tim.patch
 Patch10: 0011-Disable-network-by-ignoring-any-present-nic.patch
 Patch11: 0012-Remove-network-setup-from-graphical-and-text-interfa.patch
-# NEOWUTRAN: TODO: Patch12: 0013-Drop-NTP-configuration-spoke.patch
+Patch12: 0013-Drop-NTP-configuration-spoke.patch
 Patch13: 0014-Do-not-add-resume-kernel-option.patch
-# NEOWUTRAN: TODO: Patch14: 0015-Avoid-adding-duplicated-kernel-entries.patch
+Patch14: 0015-Avoid-adding-duplicated-kernel-entries.patch
 # NEOWUTRAN: TODO: Patch15: 0016-Set-default-scheme-in-custom-partitioning.patch
 Patch16: 0017-Use-kernel-install-instead-of-grubby-to-regenerate.patch
 Patch17: 0018-Drop-useless-on-Qubes-dependencies-on-network-filesy.patch

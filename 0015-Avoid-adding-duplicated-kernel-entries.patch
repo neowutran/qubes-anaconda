@@ -20,19 +20,18 @@ By Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
  pyanaconda/payload/__init__.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/pyanaconda/payload/__init__.py b/pyanaconda/payload/__init__.py
-index be3530e59..853a50a8f 100644
---- a/pyanaconda/payload/__init__.py
-+++ b/pyanaconda/payload/__init__.py
-@@ -663,7 +663,7 @@ class PackagePayload(Payload, metaclass=ABCMeta):
-                          if fnmatch(f, "/boot/vmlinuz-*") or
-                          fnmatch(f, "/boot/efi/EFI/%s/vmlinuz-*" % conf.bootloader.efi_dir)))
+diff --git a/pyanaconda/modules/payloads/payload/dnf/utils.py b/pyanaconda/modules/payloads/payload/dnf/utils.py
+index 7cd7650..66a8aa3 100644
+--- a/pyanaconda/modules/payloads/payload/dnf/utils.py
++++ b/pyanaconda/modules/payloads/payload/dnf/utils.py
+@@ -174,7 +174,7 @@ def get_kernel_version_list():
+         ))
  
--        return sorted(files, key=functools.cmp_to_key(payload_utils.version_cmp))
-+        return sorted(set(files), key=functools.cmp_to_key(payload_utils.version_cmp))
+     # Sort the kernel versions.
+-    sort_kernel_version_list(files)
++    sort_kernel_version_list(set(files))
  
-     @property
-     def rpm_macros(self):
+     return files
+ 
 -- 
 2.25.2
-
