@@ -19,7 +19,7 @@ URL:     http://fedoraproject.org/wiki/Anaconda
 # ./autogen.sh
 # make dist
 Source0: %{name}-%{version}.tar.bz2
-Source1: qubesos.conf
+Source1: qubes.conf
 Source2: QubesPlaceholder.txt
 Source3: QubesPlaceholder.html
 Source4: QubesPlaceholderWithLinks.html
@@ -341,7 +341,7 @@ mkdir %{buildroot}%{_datadir}/anaconda/post-scripts
 cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{buildroot}%{_datadir}/anaconda/post-scripts/
 
 # Copy QubesOS product file
-cp %{SOURCE1} %{buildroot}%{_sysconfdir}anaconda/profile.d/qubes.conf
+cp %{SOURCE1} %{buildroot}%{_sysconfdir}/anaconda/profile.d/qubes.conf
 
 # Inject QubesOS documentation directly
 #mkdir -p %{buildroot}%{_datadir}/anaconda/help
