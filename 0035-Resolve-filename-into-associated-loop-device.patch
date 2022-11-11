@@ -14,10 +14,10 @@ QubesOS/qubes-issues#6792
  1 file changed, 3 insertions(+)
 
 diff --git a/pyanaconda/payload/utils.py b/pyanaconda/payload/utils.py
-index e0c7d6cc5..42038e37c 100644
+index f03d101..b664b15 100644
 --- a/pyanaconda/payload/utils.py
 +++ b/pyanaconda/payload/utils.py
-@@ -52,6 +52,9 @@ def get_device_path(device_name):
+@@ -47,6 +47,9 @@ def get_device_path(device_name):
  
      device_tree = STORAGE.get_proxy(DEVICE_TREE)
      device_data = DeviceData.from_structure(device_tree.GetDeviceData(device_name))
@@ -29,4 +29,3 @@ index e0c7d6cc5..42038e37c 100644
  
 -- 
 2.31.1
-
