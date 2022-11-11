@@ -1,0 +1,53 @@
+diff --git a/pyanaconda/modules/storage/partitioning/automatic/utils.py b/pyanaconda/modules/storage/partitioning/automatic/utils.py
+index 56dcbd0..0391b26 100644
+--- a/pyanaconda/modules/storage/partitioning/automatic/utils.py
++++ b/pyanaconda/modules/storage/partitioning/automatic/utils.py
+@@ -257,6 +257,25 @@ def schedule_implicit_partitions(storage, disks, scheme, encrypted=False, luks_f
+ 
+ 
+ 
++QUBESOS_BTRFS_PARTITIONING = [
++    PartSpec(
++        fstype="swap",
++        grow=False,
++        lv=True,
++        encrypted=True
++    ),
++    PartSpec(
++        mountpoint="/",
++        size=Size("10GiB"),
++        required_space=Size("10GiB"),
++        grow=True,
++        btr=True,
++        lv=True,
++        thin_volume=True,
++        encrypted=True
++    )
++]
++
+ 
+ QUBESOS_PARTITIONING = [
+     PartSpec(
+@@ -520,16 +539,15 @@ def schedule_volumes(storage, devices, scheme, requests, encrypted=False):
+     #
+     # Second pass, for LVs only.
+     pool = None
+-    
+-    
+     request_thin_pool = False
+     request_thin_volume = False
+-    for request in requests:
+-        if request.thin_pool:
+-            request_thin_pool = True
++    if scheme in (AUTOPART_TYPE_LVM, AUTOPART_TYPE_LVM_THINP):
++        for request in requests:
++            if request.thin_pool:
++                request_thin_pool = True
+ 
+-        if request.thin_volume:
+-            request_thin_volume = True
++            if request.thin_volume:
++                request_thin_volume = True
+ 
+     if request_thin_volume and not request_thin_pool:
+         # create only one default thin pool if no thin_pool is requested
