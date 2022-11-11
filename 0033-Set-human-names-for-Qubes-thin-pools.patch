@@ -10,11 +10,12 @@ Subject: [PATCH] Set human names for Qubes thin pools
  pyanaconda/storage/partspec.py                               | 5 +++--
  3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-index 8a767a020..4ef249850 100644
---- a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-+++ b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-@@ -95,6 +95,7 @@ QUBESOS_PARTITIONING = [
+
+diff --git a/pyanaconda/modules/storage/partitioning/automatic/utils.py b/pyanaconda/modules/storage/partitioning/automatic/utils.py
+index 0391b26..a5fed56 100644
+--- a/pyanaconda/modules/storage/partitioning/automatic/utils.py
++++ b/pyanaconda/modules/storage/partitioning/automatic/utils.py
+@@ -289,6 +289,7 @@ QUBESOS_PARTITIONING = [
          grow=False,
          lv=True,
          thin_pool=True,
@@ -22,7 +23,7 @@ index 8a767a020..4ef249850 100644
          encrypted=True
      ),
      PartSpec(
-@@ -111,6 +112,7 @@ QUBESOS_PARTITIONING = [
+@@ -305,6 +306,7 @@ QUBESOS_PARTITIONING = [
          grow=True,
          lv=True,
          thin_pool=True,
@@ -30,11 +31,7 @@ index 8a767a020..4ef249850 100644
          encrypted=True
      )
  ]
-diff --git a/pyanaconda/modules/storage/partitioning/automatic/utils.py b/pyanaconda/modules/storage/partitioning/automatic/utils.py
-index 5f2a21a28..1b59cf490 100644
---- a/pyanaconda/modules/storage/partitioning/automatic/utils.py
-+++ b/pyanaconda/modules/storage/partitioning/automatic/utils.py
-@@ -432,7 +432,8 @@ def schedule_volumes(storage, devices, scheme, requests, encrypted=False):
+@@ -603,7 +605,8 @@ def schedule_volumes(storage, devices, scheme, requests, encrypted=False):
                  "maxsize": request.max_size,
                  "size": request.size,
                  "thin_pool": thinlp,
@@ -44,36 +41,42 @@ index 5f2a21a28..1b59cf490 100644
              })
          else:
              kwargs.update({
-diff --git a/pyanaconda/storage/partspec.py b/pyanaconda/storage/partspec.py
-index 2d821b4d8..7fdc93f5f 100644
---- a/pyanaconda/storage/partspec.py
-+++ b/pyanaconda/storage/partspec.py
-@@ -25,7 +25,7 @@ from blivet.util import stringize, unicodeize
- class PartSpec(object):
+diff --git a/pyanaconda/modules/storage/partitioning/specification.py b/pyanaconda/modules/storage/partitioning/specification.py
+index 328dece..98de161 100644
+--- a/pyanaconda/modules/storage/partitioning/specification.py
++++ b/pyanaconda/modules/storage/partitioning/specification.py
+@@ -27,7 +27,7 @@ class PartSpec(object):
  
      def __init__(self, mountpoint=None, fstype=None, size=None, max_size=None,
--                 grow=False, btr=False, lv=False, thin_pool=False,
-+                 grow=False, btr=False, lv=False, thin_pool=False, pool_name=None,
-                  thin_volume=False, weight=0, required_space=0,
-                  encrypted=False):
+                  grow=False, btr=False, lv=False, thin_pool=False, thin_volume=False, weight=0,
+-                 required_space=0, encrypted=False, schemes=None):
++                 required_space=0, encrypted=False, pool_name=None, schemes=None):
          """ Create a new storage specification.  These are used to specify
-@@ -67,6 +67,7 @@ class PartSpec(object):
-         self.lv = lv
+             the default partitioning layout as an object before we have the
+             storage system up and running.  The attributes are obvious
+@@ -69,6 +69,7 @@ class PartSpec(object):
          self.btr = btr
          self.thin_pool = thin_pool
-+        self.pool_name = pool_name
          self.thin_volume = thin_volume
++        self.pool_name = pool_name
          self.weight = weight
          self.required_space = required_space
-@@ -84,7 +85,7 @@ class PartSpec(object):
+         self.encrypted = encrypted
+@@ -82,13 +83,14 @@ class PartSpec(object):
+              "  weight = %(weight)s  fstype = %(fstype)s  encrypted = %(enc)s\n"
+              "  size = %(size)s  max_size = %(max_size)s  grow = %(grow)s\n"
+              "  required_space = %(required_space)s\n"
++             "  pool_name = %(pool_name)s\n"
+              "  schemes = %(schemes)s" %
+              {"type": self.__class__.__name__, "id": "%#x" % id(self),
+               "mountpoint": self.mountpoint, "lv": self.lv, "btrfs": self.btr,
                "weight": self.weight, "fstype": self.fstype, "size": self.size,
-               "enc": self.encrypted, "max_size": self.max_size,
-               "grow": self.grow, "thin_volume": self.thin_volume,
--              "thin_pool": self.thin_pool})
-+              "thin_pool": self.thin_pool, "pool_name": self.pool_name})
+               "enc": self.encrypted, "max_size": self.max_size, "grow": self.grow,
+               "thin_volume": self.thin_volume, "thin_pool": self.thin_pool, "required_space": self.required_space,
+-              "schemes": self.schemes})
++              "schemes": self.schemes, "pool_name": self.pool_name})
  
          return s
  
 -- 
 2.25.4
-
