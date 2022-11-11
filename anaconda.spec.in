@@ -42,7 +42,7 @@ Patch10: 0011-Disable-network-by-ignoring-any-present-nic.patch
 Patch11: 0012-Remove-network-setup-from-graphical-and-text-interfa.patch
 Patch12: 0013-Drop-NTP-configuration-spoke.patch
 Patch13: 0014-Do-not-add-resume-kernel-option.patch
-Patch14: 0015-Avoid-adding-duplicated-kernel-entries.patch
+#Patch14: 0015-Avoid-adding-duplicated-kernel-entries.patch
 # From my understanding it is now done in config file as "default_scheme", so not needed anymore
 # NEOWUTRAN: TODO: Patch15: 0016-Set-default-scheme-in-custom-partitioning.patch
 Patch16: 0017-Use-kernel-install-instead-of-grubby-to-regenerate.patch
