@@ -57,13 +57,13 @@ Patch24: 0025-Setup-grubx64.efi-directly-as-a-bootloader.patch
 Patch25: 0026-enable-discard-option-for-dom0-filesystems-by-defaul.patch
 Patch26: 0027-lvm-ensure-qubes-prefix-in-lvgroup-name.patch
 Patch27: 0028-automatic_partitioning-rename-thin-to-thin_volume-sa.patch
-# Neowutran: TODO: Patch28: 0029-Handle-thin-logical-pool-request-in-automatic-partio.patch
-# Neowutran: TODO: Patch29: 0030-Add-specific-BTRFS-automatic-partitioning-scheme.patch
-# Neowutran: Patch30: 0031-Compute-template-RPMs-needed-spaces.patch
+Patch28: 0029-Handle-thin-logical-pool-request-in-automatic-partio.patch
+Patch29: 0030-Add-specific-BTRFS-automatic-partitioning-scheme.patch
+Patch30: 0031-Compute-template-RPMs-needed-spaces.patch
 Patch31: 0032-dnfpayload-make-available-repos-for-post-scripts.patch
-#Neowutran : Patch32: 0033-Set-human-names-for-Qubes-thin-pools.patch
-# Neowutran: Patch33: 0034-Fix-standard-partitioning-set-xfs-as-default-fs-ther.patch
-# Neowutran: Patch34: 0035-Resolve-filename-into-associated-loop-device.patch
+Patch32: 0033-Set-human-names-for-Qubes-thin-pools.patch
+Patch33: 0034-Fix-standard-partitioning-set-xfs-as-default-fs-ther.patch
+Patch34: 0035-Resolve-filename-into-associated-loop-device.patch
 
 
 # Versions of required components (done so we make sure the buildrequires
