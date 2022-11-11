@@ -17,23 +17,33 @@ QubesOS/qubes-issues#6252
  .../automatic/automatic_partitioning.py       | 29 ++++++++++++++++++-
  1 file changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-index 4ef249850..2ca735e15 100644
---- a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-+++ b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-@@ -83,7 +83,7 @@ WORKSTATION_PARTITIONING = [
-     )
+
+diff --git a/pyanaconda/modules/storage/partitioning/automatic/utils.py b/pyanaconda/modules/storage/partitioning/automatic/utils.py
+index b4f7255..652b4b5 100644
+--- a/pyanaconda/modules/storage/partitioning/automatic/utils.py
++++ b/pyanaconda/modules/storage/partitioning/automatic/utils.py
+@@ -256,7 +256,6 @@ def schedule_implicit_partitions(storage, disks, scheme, encrypted=False, luks_f
+     return devs
+ 
+ 
+-
+ QUBESOS_BTRFS_PARTITIONING = [
+     PartSpec(
+         fstype="swap",
+@@ -277,7 +276,7 @@ QUBESOS_BTRFS_PARTITIONING = [
  ]
+ 
  
 -QUBESOS_PARTITIONING = [
 +QUBESOS_LVM_PARTITIONING = [
      PartSpec(
          fstype="swap",
          grow=False,
-@@ -117,6 +117,31 @@ QUBESOS_PARTITIONING = [
+@@ -311,7 +310,30 @@ QUBESOS_PARTITIONING = [
      )
  ]
  
+-
 +QUBESOS_PARTITIONING = [
 +    PartSpec(
 +        fstype="swap",
@@ -58,19 +68,17 @@ index 4ef249850..2ca735e15 100644
 +        encrypted=True
 +    )
 +]
-+
- QUBESOS_BTRFS_PARTITIONING = [
-     PartSpec(
-         fstype="swap",
-@@ -155,6 +180,8 @@ def get_default_partitioning(partitioning_type=None, scheme=None):
-     if partitioning_type is PartitioningType.QUBESOS:
-         if scheme == AUTOPART_TYPE_BTRFS:
-             return platform.set_default_partitioning() + QUBESOS_BTRFS_PARTITIONING
-+        elif scheme == AUTOPART_TYPE_LVM_THINP:
-+            return platform.set_default_partitioning() + QUBESOS_LVM_PARTITIONING
-         else:
-             return platform.set_default_partitioning() + QUBESOS_PARTITIONING
+ 
+ 
+ def get_default_partitioning(scheme=None):
+@@ -324,6 +346,8 @@ def get_default_partitioning(scheme=None):
+ 
+     if scheme == AUTOPART_TYPE_BTRFS:
+         return partitioning + QUBESOS_BTRFS_PARTITIONING
++    elif scheme == AUTOPART_TYPE_LVM_THINP:
++        return partitioning + QUBESOS_LVM_PARTITIONING
+     else:
+         return partitioning + QUBESOS_PARTITIONING
  
 -- 
 2.26.2
-
