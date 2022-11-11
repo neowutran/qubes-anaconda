@@ -9,13 +9,22 @@ Subject: [PATCH] Compute template RPMs needed spaces
  pyanaconda/ui/lib/space.py       |  7 ++++++-
  2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/pyanaconda/payload/dnfpayload.py b/pyanaconda/payload/dnfpayload.py
-index abb1826ed..51cae424e 100644
---- a/pyanaconda/payload/dnfpayload.py
-+++ b/pyanaconda/payload/dnfpayload.py
-@@ -807,6 +807,19 @@ class DNFPayload(payload.PackagePayload):
-             langpacks.append("langpacks-" + loc)
-         return langpacks
+
+diff --git a/pyanaconda/payload/dnf/payload.py b/pyanaconda/payload/dnf/payload.py
+index 5312825..c480788 100644
+--- a/pyanaconda/payload/dnf/payload.py
++++ b/pyanaconda/payload/dnf/payload.py
+@@ -16,6 +16,7 @@
+ # License and may only be used or replicated with the express permission of
+ # Red Hat, Inc.
+ #
++from blivet.size import Size
+ from pyanaconda.core.path import join_paths
+ from pyanaconda.modules.common.errors.installation import NonCriticalInstallationError, \
+     InstallationError
+@@ -93,6 +94,20 @@ class DNFPayload(Payload):
+         """The DNF manager."""
+         return self._dnf_manager
  
 +    @property
 +    def qubes_templates_size(self):
@@ -30,11 +39,12 @@ index abb1826ed..51cae424e 100644
 +        log.debug("[Qubes OS]: Total templates RPMs size: %s", templates_size)
 +        return templates_size
 +
-     def _sync_metadata(self, dnf_repo):
-         try:
-             dnf_repo.load()
++
+     @property
+     def _base(self):
+         """Return a DNF base.
 diff --git a/pyanaconda/ui/lib/space.py b/pyanaconda/ui/lib/space.py
-index 5794b57ae..c1a2a54f1 100644
+index 5794b57..c1a2a54 100644
 --- a/pyanaconda/ui/lib/space.py
 +++ b/pyanaconda/ui/lib/space.py
 @@ -56,6 +56,10 @@ class FileSystemSpaceChecker(object):
@@ -60,4 +70,3 @@ index 5794b57ae..c1a2a54f1 100644
          if free > needed:
 -- 
 2.25.2
-
