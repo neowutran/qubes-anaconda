@@ -10,7 +10,7 @@ Subject: [PATCH] Simplify USER configuration spoke
  2 files changed, 19 insertions(+), 361 deletions(-)
 
 diff --git a/pyanaconda/ui/gui/spokes/user.glade b/pyanaconda/ui/gui/spokes/user.glade
-index 4783a9f..5fcc923 100644
+index 4783a9f..84f359c 100644
 --- a/pyanaconda/ui/gui/spokes/user.glade
 +++ b/pyanaconda/ui/gui/spokes/user.glade
 @@ -55,24 +55,6 @@
@@ -62,7 +62,7 @@ index 4783a9f..5fcc923 100644
                      <child>
                        <object class="GtkEntry" id="username_entry">
                          <property name="visible">True</property>
-@@ -200,102 +165,13 @@
+@@ -200,23 +165,6 @@
                          <property name="top-attach">7</property>
                        </packing>
                      </child>
@@ -83,48 +83,13 @@ index 4783a9f..5fcc923 100644
 -                        <property name="top-attach">4</property>
 -                      </packing>
 -                    </child>
--                    <child>
--                      <object class="GtkBox" id="box2">
--                        <property name="visible">True</property>
--                        <property name="can-focus">False</property>
--                        <property name="hexpand">True</property>
--                        <child>
--                          <object class="GtkLevelBar" id="password_bar">
--                            <property name="visible">True</property>
--                            <property name="can-focus">False</property>
--                            <property name="valign">center</property>
--                            <property name="max-value">4</property>
--                            <property name="mode">discrete</property>
--                          </object>
--                          <packing>
--                            <property name="expand">True</property>
--                            <property name="fill">True</property>
--                            <property name="position">0</property>
--                          </packing>
--                        </child>
--                        <child>
--                          <object class="GtkLabel" id="password_label">
--                            <property name="visible">True</property>
--                            <property name="can-focus">False</property>
--                            <property name="valign">center</property>
--                            <property name="xpad">6</property>
--                            <property name="label" translatable="yes">empty password</property>
--                            <attributes>
--                              <attribute name="weight" value="bold"/>
--                            </attributes>
--                          </object>
--                          <packing>
--                            <property name="expand">False</property>
--                            <property name="fill">True</property>
--                            <property name="position">1</property>
--                          </packing>
--                        </child>
--                      </object>
--                      <packing>
--                        <property name="left-attach">1</property>
--                        <property name="top-attach">6</property>
--                      </packing>
--                    </child>
+                     <child>
+                       <object class="GtkBox" id="box2">
+                         <property name="visible">True</property>
+@@ -259,43 +207,13 @@
+                         <property name="top-attach">6</property>
+                       </packing>
+                     </child>
 -                    <child>
 -                      <object class="GtkCheckButton" id="admin_checkbox">
 -                        <property name="label" translatable="yes" context="GUI|User">Add ad_ministrative privileges to this user account (wheel group membership)</property>
@@ -166,13 +131,10 @@ index 4783a9f..5fcc923 100644
                          </child>
                          <child>
                            <placeholder/>
-@@ -372,6 +248,21 @@
+@@ -372,6 +290,18 @@
                      <child>
                        <placeholder/>
                      </child>
-+                    <child>
-+                      <placeholder/>
-+                    </child>
 +                    <child>
 +                      <placeholder/>
 +                    </child>
@@ -189,7 +151,7 @@ index 4783a9f..5fcc923 100644
                    <packing>
                      <property name="expand">True</property>
 diff --git a/pyanaconda/ui/gui/spokes/user.py b/pyanaconda/ui/gui/spokes/user.py
-index e107afe..0f20005 100644
+index e107afe..8a9fc1c 100644
 --- a/pyanaconda/ui/gui/spokes/user.py
 +++ b/pyanaconda/ui/gui/spokes/user.py
 @@ -41,177 +41,7 @@ from pyanaconda.core.regexes import GROUPLIST_FANCY_PARSE
@@ -380,7 +342,7 @@ index e107afe..0f20005 100644
      uiFile = "spokes/user.glade"
      category = UserSettingsCategory
      icon = "avatar-default-symbolic"
-@@ -281,18 +111,9 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -281,15 +111,9 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
          # gather references to relevant GUI objects
  
          # entry fields
@@ -393,13 +355,10 @@ index e107afe..0f20005 100644
 -        self._password_required_checkbox = self.builder.get_object("password_required_checkbox")
 -        # advanced user configration dialog button
 -        self._advanced_button = self.builder.get_object("advanced_button")
--        # password checking status bar & label
--        self._password_bar = self.builder.get_object("password_bar")
--        self._password_label = self.builder.get_object("password_label")
- 
-         # Install the password checks:
-         # - Has a password been specified?
-@@ -317,7 +138,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+         # password checking status bar & label
+         self._password_bar = self.builder.get_object("password_bar")
+         self._password_label = self.builder.get_object("password_label")
+@@ -317,7 +141,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
  
          # username and full name checks
          self._username_check = input_checking.UsernameCheck()
@@ -407,7 +366,7 @@ index e107afe..0f20005 100644
          # empty username is considered a success so that the user can leave
          # the spoke without filling it in
          self._username_check.success_if_username_empty = True
-@@ -343,7 +163,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -343,7 +166,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
          # 3) is the password valid according to the current password checking policy ?
          # 4) is the password free of non-ASCII characters ?
          self.checker.add_check(self._username_check)
@@ -415,19 +374,7 @@ index e107afe..0f20005 100644
          self.checker.add_check(self._empty_check)
          self.checker.add_check(self._confirm_check)
          self.checker.add_check(self._validity_check)
-@@ -353,11 +172,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
-             self.username_entry: True
-             }
- 
--        # Configure levels for the password bar
--        self.password_bar.add_offset_value("low", 2)
--        self.password_bar.add_offset_value("medium", 3)
--        self.password_bar.add_offset_value("high", 4)
--
-         # Modify the GUI based on the kickstart and policy information
-         # This needs to happen after the input checks have been created, since
-         # the Gtk signal handlers use the input check variables.
-@@ -370,12 +184,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -370,12 +192,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
              # Policy is that a non-empty password is required
              self.password_required = True
  
@@ -440,7 +387,7 @@ index e107afe..0f20005 100644
  
          # set the visibility of the password entries
          # - without this the password visibility toggle icon will
-@@ -398,30 +206,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -398,30 +214,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
      def username(self, new_username):
          self.username_entry.set_text(new_username)
  
@@ -471,7 +418,7 @@ index e107afe..0f20005 100644
      @property
      def user(self):
          """The user that is manipulated by the User spoke.
-@@ -443,8 +227,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -443,8 +235,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
          self._user_list = get_user_list(self._users_module, add_default=True, add_if_not_empty=self._requested_user_cleared)
  
          self.username = self.user.name
@@ -480,7 +427,7 @@ index e107afe..0f20005 100644
  
          # rerun checks so that we have a correct status message, if any
          self.checker.run_checks()
-@@ -467,22 +249,13 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -467,22 +257,13 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
      def apply(self):
          # set the password only if the user enters anything to the text entry
          # this should preserve the kickstart based password
@@ -507,7 +454,7 @@ index e107afe..0f20005 100644
  
          # We make it possible to clear users requested from kickstart (or DBus API)
          # during an interactive installation. This is done by setting their name
-@@ -507,22 +280,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -507,22 +288,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
      def completed(self):
          return bool(get_user_list(self._users_module))
  
@@ -530,7 +477,7 @@ index e107afe..0f20005 100644
      def on_password_icon_clicked(self, entry, icon_pos, event):
          """Called by Gtk callback when the icon of a password entry is clicked."""
          set_password_visibility(entry, not entry.get_visibility())
-@@ -544,12 +301,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -544,12 +309,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
          """Called by Gtk on all username changes."""
          new_username = editable.get_text()
  
@@ -543,7 +490,7 @@ index e107afe..0f20005 100644
          # update the username in checker
          self.checker.username = new_username
  
-@@ -561,37 +312,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -561,37 +320,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
          # Re-run the password checks against the new username
          self.checker.run_checks()
  
@@ -581,7 +528,7 @@ index e107afe..0f20005 100644
      def _checks_done(self, error_message):
          """Update the warning with the input validation error from the first
             error message or clear warnings if all the checks were successful.
-@@ -603,7 +323,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+@@ -603,7 +331,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
          # check if an unwaivable check failed
          unwaivable_checks = [not self._confirm_check.result.success,
                               not self._username_check.result.success,
