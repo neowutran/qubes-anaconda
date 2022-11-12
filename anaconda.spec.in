@@ -27,6 +27,7 @@ Source5: 30-qubes-templates.ks
 Source6: 40-qubes-alt-kernels.ks
 Source7: 50-qubes.ks
 Source8: 60-systemd-preset.ks
+Source9: installer.repo
 
 # NEOWUTRAN: TODO: Patch0: 0001-check-for-Qubes-OS-hardware-required-features.patch
 Patch1: 0002-Fix-grub-config-setup-by-removing-non-xen-options.patch
@@ -60,7 +61,7 @@ Patch27: 0028-automatic_partitioning-rename-thin-to-thin_volume-sa.patch
 Patch28: 0029-Handle-thin-logical-pool-request-in-automatic-partio.patch
 Patch29: 0030-Add-specific-BTRFS-automatic-partitioning-scheme.patch
 Patch30: 0031-Compute-template-RPMs-needed-spaces.patch
-Patch31: 0032-dnfpayload-make-available-repos-for-post-scripts.patch
+#Patch31: 0032-dnfpayload-make-available-repos-for-post-scripts.patch
 Patch32: 0033-Set-human-names-for-Qubes-thin-pools.patch
 Patch33: 0034-Fix-standard-partitioning-set-xfs-as-default-fs-ther.patch
 Patch34: 0035-Resolve-filename-into-associated-loop-device.patch
@@ -336,6 +337,7 @@ mkdir %{buildroot}%{_datadir}/anaconda/post-scripts
 ##### QUBES BEGIN ###
 # Copy QubesOS post-install scripts
 cp -r %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{buildroot}%{_datadir}/anaconda/post-scripts/
+cp -r %{SOURCE9} %{buildroot}%{_sysconfdir}/anaconda/
 
 # Copy QubesOS product file
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}/anaconda/profile.d/qubes.conf
