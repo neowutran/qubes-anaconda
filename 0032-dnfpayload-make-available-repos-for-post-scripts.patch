@@ -23,5 +23,20 @@ index 22edeb5..ea74658 100644
      return ks_data
 	 
 
+diff --git a/pyanaconda/modules/payloads/kickstart.py b/pyanaconda/modules/payloads/kickstart.py
+index 22edeb5..d75da9b 100644
+--- a/pyanaconda/modules/payloads/kickstart.py
++++ b/pyanaconda/modules/payloads/kickstart.py
+@@ -73,6 +73,10 @@ def convert_ks_repo_to_repo_data(ks_data):
+     repo_data.ssl_configuration.client_cert_path = ks_data.sslclientcert or ""
+     repo_data.ssl_configuration.client_key_path = ks_data.sslclientkey or ""
+ 
++    repo_file = '/tmp/installer.repo'
++    with open(repo_file, 'a') as repo_fd:
++        repo_fd.write(repo_data.dump())
++
+     return repo_data
+ 
+ 
 -- 
 2.25.4
