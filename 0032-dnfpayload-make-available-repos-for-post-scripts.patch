@@ -8,47 +8,19 @@ Subject: [PATCH] dnfpayload: make available repos for post-scripts
  pyanaconda/payload/dnfpayload.py | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/pyanaconda/modules/payloads/kickstart.py b/pyanaconda/modules/payloads/kickstart.py
-index 22edeb5..5a3f17e 100644
---- a/pyanaconda/modules/payloads/kickstart.py
-+++ b/pyanaconda/modules/payloads/kickstart.py
-@@ -73,6 +73,10 @@ def convert_ks_repo_to_repo_data(ks_data):
-     repo_data.ssl_configuration.client_cert_path = ks_data.sslclientcert or ""
-     repo_data.ssl_configuration.client_key_path = ks_data.sslclientkey or ""
- 
-+    repo_file = '/tmp/installer.repo'
-+    with open(repo_file, 'a') as repo_fd:
-+        repo_fd.write(repo_data.dump().strip())
-+
-     return repo_data
- 
- 
-@@ -82,6 +86,11 @@ def convert_repo_data_to_ks_repo(repo_data):
-     :param RepoConfigurationData repo_data: a repo configuration
-     :return RepoData: a kickstart data
-     """
-+
-+    repo_file = '/tmp/installer.repo'
-+    with open(repo_file, 'a') as repo_fd:
-+        repo_fd.write(repo_data.dump().strip())
-+
-     if not isinstance(repo_data, RepoConfigurationData):
-         raise ValueError("Unexpected data: {}".format(type(repo_data)))
- 
 diff --git a/pyanaconda/modules/payloads/payload/dnf/dnf_manager.py b/pyanaconda/modules/payloads/payload/dnf/dnf_manager.py
-index 3a679a6..6d38dd5 100644
+index 6d38dd5..5e02879 100644
 --- a/pyanaconda/modules/payloads/payload/dnf/dnf_manager.py
 +++ b/pyanaconda/modules/payloads/payload/dnf/dnf_manager.py
-@@ -407,6 +407,10 @@ class DNFManager(object):
+@@ -800,6 +800,9 @@ class DNFManager(object):
+             # Add the new repository.
+             self._base.repos.add(repo)
  
-     def dump_configuration(self):
-         """Log the state of the DNF configuration."""
 +        repo_file = '/tmp/installer.repo'
 +        with open(repo_file, 'a') as repo_fd:
-+            repo_fd.write(self._base.conf.dump().strip())
-+
-         log.debug(
-             "DNF configuration:"
-             "\n%s"
++            repo_fd.write(repo.dump())
+         log.info("Added the '%s' repository: %s", repo.id, repo)
+ 
+     def _create_repository(self, data: RepoConfigurationData):
 -- 
 2.25.4
