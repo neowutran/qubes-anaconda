@@ -90,7 +90,7 @@ index 188f93b..f736ce6 100644
                                    </object>
                                  </child>
 diff --git a/pyanaconda/ui/gui/spokes/datetime_spoke.py b/pyanaconda/ui/gui/spokes/datetime_spoke.py
-index 0ce46c9..7b2526f 100644
+index 0ce46c9..c1eea31 100644
 --- a/pyanaconda/ui/gui/spokes/datetime_spoke.py
 +++ b/pyanaconda/ui/gui/spokes/datetime_spoke.py
 @@ -23,7 +23,6 @@ import locale as locale_mod
@@ -205,11 +205,10 @@ index 0ce46c9..7b2526f 100644
      def _cancel_planned_update(self):
          """Cancel system time update planned by manual setting"""
          # cancel system time update
-@@ -908,77 +852,3 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
-         if not self._update_datetime_timer:
+@@ -909,76 +853,3 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
              self._update_datetime_timer = Timer()
              self._update_datetime_timer.timeout_sec(1, self._update_datetime)
--
+ 
 -    def on_ntp_switched(self, switch, *args):
 -        if switch.get_active():
 -            self._cancel_planned_update()
