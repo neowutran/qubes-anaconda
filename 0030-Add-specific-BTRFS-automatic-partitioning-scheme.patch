@@ -51,24 +51,11 @@ index 56dcbd0..0391b26 100644
  
      if request_thin_volume and not request_thin_pool:
          # create only one default thin pool if no thin_pool is requested
-diff --git a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-index bdf27bc..ed0c90f 100644
---- a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-+++ b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
-@@ -132,7 +132,7 @@ class AutomaticPartitioningTask(NonInteractivePartitioningTask):
-         """
-         requests = []
- 
--        for request in get_default_partitioning():
-+        for request in get_default_partitioning(scheme=scheme):
-             # Skip mount points excluded from the chosen scheme.
-             if request.schemes and scheme not in request.schemes:
-                 continue
 diff --git a/pyanaconda/modules/storage/partitioning/automatic/utils.py b/pyanaconda/modules/storage/partitioning/automatic/utils.py
-index a5fed56..b4f7255 100644
+index b9b1802..8674fa4 100644
 --- a/pyanaconda/modules/storage/partitioning/automatic/utils.py
 +++ b/pyanaconda/modules/storage/partitioning/automatic/utils.py
-@@ -314,7 +314,7 @@ QUBESOS_PARTITIONING = [
+@@ -293,7 +293,7 @@ QUBESOS_PARTITIONING = [
  
  
  
@@ -77,7 +64,7 @@ index a5fed56..b4f7255 100644
      """Get the default partitioning requests.
  
      :return: a list of partitioning specs
-@@ -322,32 +322,37 @@ def get_default_partitioning():
+@@ -301,9 +301,15 @@ def get_default_partitioning():
      # Get the platform-specific partitioning.
      partitioning = list(platform.partitions)
  
@@ -86,57 +73,25 @@ index a5fed56..b4f7255 100644
 +    else:
 +        return partitioning + QUBESOS_PARTITIONING
 +
++
      # Get the product-specific partitioning.
 -    for attrs in conf.storage.default_partitioning:
--        name = attrs.get("name")
--        swap = name == "swap"
--        schemes = set()
--
--        if attrs.get("btrfs"):
--            schemes.add(AUTOPART_TYPE_BTRFS)
--
--        spec = PartSpec(
--            mountpoint=name if not swap else None,
--            fstype=None if not swap else "swap",
--            lv=True,
--            thin_volume=not swap,
--            btr=not swap,
--            size=attrs.get("min") or attrs.get("size"),
--            max_size=attrs.get("max"),
--            grow="min" in attrs,
--            required_space=attrs.get("free") or 0,
--            encrypted=True,
--            schemes=schemes,
--        )
--
--        partitioning.append(spec)
--
--    return partitioning
-+    # for attrs in conf.storage.default_partitioning:
-+    #    name = attrs.get("name")
-+    #    swap = name == "swap"
-+    #    schemes = set()
-+    #
-+    #    if attrs.get("btrfs"):
-+    #        schemes.add(AUTOPART_TYPE_BTRFS)
-+    #
-+    #    spec = PartSpec(
-+    #        mountpoint=name if not swap else None,
-+    #        fstype=None if not swap else "swap",
-+    #        lv=True,
-+    #        thin_volume=not swap,
-+    #        btr=not swap,
-+    #        size=attrs.get("min") or attrs.get("size"),
-+    #        max_size=attrs.get("max"),
-+    #        grow="min" in attrs,
-+    #        required_space=attrs.get("free") or 0,
-+    #        encrypted=True,
-+    #        schemes=schemes,
-+    #    )
-+    #
-+    #    partitioning.append(spec)
-+    #
-+    # return partitioning
+-        partitioning.append(get_part_spec(attrs))
++    #for attrs in conf.storage.default_partitioning:
++    #    partitioning.append(get_part_spec(attrs))
  
+     return partitioning
  
- def schedule_partitions(storage, disks, implicit_devices, scheme, requests, encrypted=False,
+diff --git a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
+index 5d8c4da..18667d3 100644
+--- a/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
++++ b/pyanaconda/modules/storage/partitioning/automatic/automatic_partitioning.py
+@@ -134,7 +134,7 @@ class AutomaticPartitioningTask(NonInteractivePartitioningTask):
+         swap = None
+ 
+         # Create partitioning specs based on the default configuration.
+-        for spec in get_default_partitioning():
++        for spec in get_default_partitioning(scheme=scheme):
+             # Skip mount points excluded from the chosen scheme.
+             if spec.schemes and scheme not in spec.schemes:
+                 continue
