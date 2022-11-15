@@ -90,18 +90,18 @@ index 188f93b..f736ce6 100644
                                    </object>
                                  </child>
 diff --git a/pyanaconda/ui/gui/spokes/datetime_spoke.py b/pyanaconda/ui/gui/spokes/datetime_spoke.py
-index 9b56e5d..c12433a 100644
+index 0ce46c9..7b2526f 100644
 --- a/pyanaconda/ui/gui/spokes/datetime_spoke.py
 +++ b/pyanaconda/ui/gui/spokes/datetime_spoke.py
-@@ -24,7 +24,6 @@ import functools
+@@ -23,7 +23,6 @@ import locale as locale_mod
+ import functools
  import copy
  
- from pyanaconda import isys
 -from pyanaconda import ntp
  from pyanaconda import flags
  from pyanaconda.anaconda_loggers import get_module_logger
  from pyanaconda.core import constants
-@@ -37,14 +36,12 @@ from pyanaconda.localization import get_xlated_timezone, resolve_date_format
+@@ -36,14 +35,12 @@ from pyanaconda.localization import get_xlated_timezone, resolve_date_format
  from pyanaconda.modules.common.structures.timezone import TimeSourceData
  from pyanaconda.modules.common.constants.services import TIMEZONE, NETWORK
  from pyanaconda.modules.common.util import is_module_available
@@ -112,11 +112,11 @@ index 9b56e5d..c12433a 100644
  from pyanaconda.ui.categories.localization import LocalizationCategory
  from pyanaconda.ui.gui.utils import blockedHandler
 -from pyanaconda.ui.gui.spokes.lib.ntp_dialog import NTPConfigDialog
--from pyanaconda.timezone import NTP_SERVICE, get_all_regions_and_timezones, get_timezone, is_valid_timezone
-+from pyanaconda.timezone import get_all_regions_and_timezones, get_timezone, is_valid_timezone
+-from pyanaconda.timezone import NTP_SERVICE, get_all_regions_and_timezones, get_timezone, \
++from pyanaconda.timezone import get_all_regions_and_timezones, get_timezone, \
+     is_valid_timezone, set_system_date_time
  from pyanaconda.threading import threadMgr, AnacondaThread
  
- import gi
 @@ -200,9 +197,6 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
          self._timezone_module = TIMEZONE.get_proxy()
          self._network_module = NETWORK.get_proxy()
@@ -182,7 +182,7 @@ index 9b56e5d..c12433a 100644
      @async_action_wait
      def _set_timezone(self, timezone):
          """
-@@ -879,22 +839,6 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
+@@ -881,22 +841,6 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
          footer_alignment = self.builder.get_object("footerAlignment")
          footer_alignment.set_sensitive(sensitive)
  
@@ -205,10 +205,11 @@ index 9b56e5d..c12433a 100644
      def _cancel_planned_update(self):
          """Cancel system time update planned by manual setting"""
          # cancel system time update
-@@ -907,76 +851,4 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
+@@ -908,77 +852,3 @@ class DatetimeSpoke(FirstbootSpokeMixIn, NormalSpoke):
+         if not self._update_datetime_timer:
              self._update_datetime_timer = Timer()
              self._update_datetime_timer.timeout_sec(1, self._update_datetime)
- 
+-
 -    def on_ntp_switched(self, switch, *args):
 -        if switch.get_active():
 -            self._cancel_planned_update()
@@ -282,7 +283,5 @@ index 9b56e5d..c12433a 100644
 -
 -        if working_server is None:
 -            self._show_no_ntp_server_warning()
-+  
-\ No newline at end of file
 -- 
 2.25.2
