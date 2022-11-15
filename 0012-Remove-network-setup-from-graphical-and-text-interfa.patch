@@ -2612,7 +2612,7 @@ index 1ed5a90..0000000
 -</interface>
 diff --git a/pyanaconda/ui/gui/spokes/network.py b/pyanaconda/ui/gui/spokes/network.py
 deleted file mode 100644
-index 69f3d4c..0000000
+index cb7f6c9..0000000
 --- a/pyanaconda/ui/gui/spokes/network.py
 +++ /dev/null
 @@ -1,1754 +0,0 @@
@@ -4138,7 +4138,7 @@ index 69f3d4c..0000000
 -                        "restarting payload thread"
 -                    )
 -                    from pyanaconda.payload.manager import payloadMgr
--                    payloadMgr.restart_thread(
+-                    payloadMgr.start(
 -                        payload=self.payload,
 -                        fallback=not anaconda_flags.automatedInstall,
 -                        only_on_change=True
@@ -4305,7 +4305,7 @@ index 69f3d4c..0000000
 -        if (not self.payload.is_ready() and not self._initially_available
 -            and self._now_available and self.payload.needs_network):
 -            from pyanaconda.payload.manager import payloadMgr
--            payloadMgr.restart_thread(self.payload, fallback=not anaconda_flags.automatedInstall)
+-            payloadMgr.start(self.payload, fallback=not anaconda_flags.automatedInstall)
 -
 -        self.network_control_box.kill_nmce(msg="leaving standalone network spoke")
 -        self.network_control_box.disconnect_client_callbacks()
@@ -4372,7 +4372,7 @@ index 69f3d4c..0000000
 -    return [c for c in connections if ap.connection_valid(c)]
 diff --git a/pyanaconda/ui/tui/spokes/network.py b/pyanaconda/ui/tui/spokes/network.py
 deleted file mode 100644
-index bc085a3..0000000
+index fe27ce8..0000000
 --- a/pyanaconda/ui/tui/spokes/network.py
 +++ /dev/null
 @@ -1,633 +0,0 @@
@@ -4815,7 +4815,7 @@ index bc085a3..0000000
 -            self._apply = False
 -            if ANACONDA_ENVIRON in flags.environs:
 -                from pyanaconda.payload.manager import payloadMgr
--                payloadMgr.restart_thread(self.payload, try_media=False)
+-                payloadMgr.start(self.payload, try_media=False)
 -
 -
 -class ConfigureDeviceSpoke(NormalTUISpoke):
@@ -5009,6 +5009,5 @@ index bc085a3..0000000
 -        connection.add_setting(s_ib)
 -    connection.add_setting(s_con)
 -    return connection
-
 -- 
 2.25.2
